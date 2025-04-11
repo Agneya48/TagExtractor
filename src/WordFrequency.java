@@ -93,7 +93,7 @@ public class WordFrequency {
 
         try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
             for (Map.Entry<String, Integer> entry : wordFrequencies.entrySet()) {
-                String line = String.format("%s, %s", entry.getKey(), entry.getValue());
+                String line = String.format("%s,%s", entry.getKey(), entry.getValue());
                 writer.write(line);
                 writer.newLine();
             }
@@ -122,7 +122,7 @@ public class WordFrequency {
             Path savePath = chooser.getSelectedFile().toPath();
             try (BufferedWriter writer = Files.newBufferedWriter(savePath)) {
                 for (Map.Entry<String, Integer> entry : wordFrequencies.entrySet()) {
-                    String line = String.format("%s, %s", entry.getKey(), entry.getValue());
+                    String line = String.format("%s,%s", entry.getKey(), entry.getValue());
                     writer.write(line);
                     writer.newLine();
                 }

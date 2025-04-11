@@ -5,7 +5,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -118,7 +117,6 @@ class WordFrequencyTest {
         assertTrue(sort3.containsKey("whale"));
 
         List<Integer> actualValues = new ArrayList<>();
-        List<Integer> lastTenActualValues = new ArrayList<>();
         List<Integer> expectedValues = Arrays.asList(314, 96, 94, 88, 87, 84, 69, 49, 48, 34);
         for (Map.Entry<String, Integer> entry : sort1.entrySet()) {
             actualValues.add(entry.getValue());
