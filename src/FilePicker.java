@@ -7,8 +7,9 @@ import java.nio.file.Path;
 
 /**
  * Simple component that combines a JButton, JFileChooser, JTextField, and JLabel to create a standard-looking
- * Filepicker component. Currently used exclusively for loading files without an extension filter,
- * but could easily have methods created to add that functionality.
+ * File picker component. Currently used exclusively for loading files without an extension filter,
+ * but could easily have methods added for that functionality.
+ * @author Josh Hampton hamptojt@mail.uc.edu
  */
 
 public class FilePicker extends JPanel{

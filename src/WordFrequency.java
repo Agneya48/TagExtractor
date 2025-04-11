@@ -7,8 +7,10 @@ import java.util.stream.Collectors;
 
 /**
  * A collection of static methods for counting word frequency of a given file,
- * excluding the stop words provided in another file. Intended to be paired with a GUI,
- * or otherwise used as a callable functions in another program.
+ * excluding stop words provided in another file. Intended to be paired with a GUI,
+ * or otherwise used as a callable static functions for other programs.
+ * Storing maps / dictionaries of large text files can eat a lot of RAM, so creating maps on
+ * demand from static methods makes sense.
  */
 
 public class WordFrequency {

@@ -4,6 +4,18 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.*;
 
+/**
+ * GUI for lab 08 tag extractor for the University of Cincinnnati. Calls methods and components from
+ * two custom Classes which handle most of the computation, but much of the top-level program logic
+ * is still located in this class.
+ *
+ * Very much  unoptimized; can eat 300+ MB of RAM when reading large books. Could be heavily mitigated
+ * by making exclusive use of static methods to generate and read/write the memory-hungry maps on demand,
+ * but didn't reach the point where I thought a refactor was truly necessary.
+ *
+ * @author Josh Hampton hamptojt@mail.uc.edu
+ */
+
 public class GUITagExtractor extends JFrame {
 
     private WordFrequency wordFrequenciesObj;
