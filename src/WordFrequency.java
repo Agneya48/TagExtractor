@@ -1,18 +1,17 @@
-import java.io.BufferedReader;
-import java.io.IOException;
+import javax.swing.*;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
 import java.nio.file.Path;
 import java.util.stream.Collectors;
 
 /**
- * A class that contains a method for counting the word frequency of a given file,
+ * A collection of static methods for counting word frequency of a given file,
  * excluding the stop words provided in another file. Intended to be paired with a GUI,
- * or otherwise used as a function in another program.
+ * or otherwise used as a callable functions in another program.
  */
 
 public class WordFrequency {
-
 
     /**
      * Finds word frequencies of given text file, excluding words in stop file
@@ -23,7 +22,7 @@ public class WordFrequency {
      * @return Map of Word Frequency
      * @throws IOException
      */
-    public Map<String, Integer> getWordFrequencies(Path filePath, Path stopWordsFilePath) {
+    public static Map<String, Integer> getWordFrequencies(Path filePath, Path stopWordsFilePath) {
         Map<String, Integer> wordFrequencies = new HashMap<>();
         HashSet<String> stopWords = loadStopWords(stopWordsFilePath);
 
@@ -46,7 +45,7 @@ public class WordFrequency {
         return wordFrequencies;
     }
 
-    private HashSet<String> loadStopWords(Path path) {
+    private static HashSet<String> loadStopWords(Path path) {
         HashSet<String> stopWords = new HashSet<>();
         try (BufferedReader reader = Files.newBufferedReader(path)) {
             String line;
@@ -60,7 +59,7 @@ public class WordFrequency {
         return stopWords;
     }
 
-    public Map<String, Integer> sortByValueDesc(Map<String, Integer> unsortedMap) {
+    public static Map<String, Integer> sortByValueDesc(Map<String, Integer> unsortedMap) {
 
         Map<String, Integer> sortedMap = unsortedMap.entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
@@ -70,7 +69,7 @@ public class WordFrequency {
         return sortedMap;
     }
 
-    public Map<String, Integer> sortByValueAsc(Map<String, Integer> unsortedMap) {
+    public static Map<String, Integer> sortByValueAsc(Map<String, Integer> unsortedMap) {
 
         Map<String, Integer> sortedMap = unsortedMap.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue())
@@ -78,5 +77,59 @@ public class WordFrequency {
                         (e1, e2) -> e1, LinkedHashMap::new));
 
         return sortedMap;
+    }
+
+    /**
+     * Saves csv formatted text file of the Map of word Frequencies at the given Path.
+     * @param filePath Path object where the file will be saved
+     * @param wordFrequencies Map object that will be written to a csv text file
+     */
+    public static void saveWordFrequencies(Path filePath, Map<String, Integer> wordFrequencies) {
+        if (filePath == null) {
+            return;
+        }
+
+        try (BufferedWriter writer = Files.newBufferedWriter(filePath)) {
+            for (Map.Entry<String, Integer> entry : wordFrequencies.entrySet()) {
+                String line = String.format("%s, %s", entry.getKey(), entry.getValue());
+                writer.write(line);
+                writer.newLine();
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error writing file: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Alternative method that uses JFileChooser to select save destination
+     * if a path isn't specified
+     * @param wordFrequencies Map of word frequencies
+     */
+    public static void saveWordFrequencies(Map<String, Integer> wordFrequencies) {
+
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+
+        int result = chooser.showSaveDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+
+            Path savePath = chooser.getSelectedFile().toPath();
+            try (BufferedWriter writer = Files.newBufferedWriter(savePath)) {
+                for (Map.Entry<String, Integer> entry : wordFrequencies.entrySet()) {
+                    String line = String.format("%s, %s", entry.getKey(), entry.getValue());
+                    writer.write(line);
+                    writer.newLine();
+                }
+
+            } catch (IOException e) {
+                System.out.println("Error writing file: " + e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
     }
 }

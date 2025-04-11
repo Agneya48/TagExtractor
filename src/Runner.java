@@ -1,6 +1,6 @@
 public class Runner {
     public static void main(String[] args) {
 
-        UIWordFrequency gui = new UIWordFrequency();
+        GUITagExtractor gui = new GUITagExtractor();
     }
 }

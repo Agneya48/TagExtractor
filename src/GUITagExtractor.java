@@ -1,11 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.nio.file.Path;
 import java.util.*;
 
-public class UIWordFrequency extends JFrame {
+public class GUITagExtractor extends JFrame {
 
     private WordFrequency wordFrequenciesObj;
     private Map<String, Integer> unsortedFrequencies;
+    private Map<String, Integer> sortedFrequencies;
 
     private JPanel topPanel;
     private JPanel bottomPanel;
@@ -20,10 +23,15 @@ public class UIWordFrequency extends JFrame {
     private JScrollPane scrollPane;
     private JButton submitButton;
     private JButton resetButton;
+    private JButton saveButton;
 
-    public UIWordFrequency() {
+    private JFileChooser saveFileChooser;
+
+    public GUITagExtractor() {
 
         wordFrequenciesObj = new WordFrequency();
+        saveFileChooser= new JFileChooser();
+        saveFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
 
         //GUI CODE//
         setTitle("Word Frequency Counter");
@@ -36,7 +44,7 @@ public class UIWordFrequency extends JFrame {
         bottomPanel = new JPanel();
         buttonSubPanel = new JPanel();
 
-        headingLabel = new JLabel("Word Frequency Counter");
+        headingLabel = new JLabel("Tag Extractor");
         headingLabel.setFont(new Font("Arial", Font.BOLD, 20));
         headingLabel.setBorder(BorderFactory.createEmptyBorder(20, 5, 10, 5));
         topPanel.add(headingLabel);
@@ -61,11 +69,18 @@ public class UIWordFrequency extends JFrame {
         buttonSubPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         submitButton = new JButton("Submit");
-        submitButton.addActionListener(e -> {submitButtonClicked();
+        submitButton.addActionListener(e -> {
+            submitButtonClicked();
+        });
+
+        saveButton = new JButton("Save");
+        saveButton.addActionListener(e -> {
+            saveButtonClicked();
         });
 
         resetButton = new JButton("Reset");
-        resetButton.addActionListener(e -> {resetButtonClicked();
+        resetButton.addActionListener(e -> {
+            resetButtonClicked();
         });
 
         submitButton.setHorizontalAlignment(SwingConstants.CENTER);
@@ -73,6 +88,8 @@ public class UIWordFrequency extends JFrame {
 
         buttonSubPanel.add(Box.createHorizontalGlue());
         buttonSubPanel.add(resetButton);
+        buttonSubPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        buttonSubPanel.add(saveButton);
         buttonSubPanel.add(Box.createRigidArea(new Dimension(10, 0)));
         buttonSubPanel.add(submitButton);
         buttonSubPanel.add(Box.createHorizontalGlue());
@@ -94,21 +111,46 @@ public class UIWordFrequency extends JFrame {
             unsortedFrequencies = wordFrequenciesObj.getWordFrequencies(
                     scanFilePicker.getSelectedFilePath(), stopWordsFilePicker.getSelectedFilePath());
 
-            Map<String, Integer> sortedFrequencies = wordFrequenciesObj.sortByValueDesc(unsortedFrequencies);
+            sortedFrequencies = wordFrequenciesObj.sortByValueDesc(unsortedFrequencies);
             for (Map.Entry<String, Integer> entry : sortedFrequencies.entrySet()) {
                 textArea.append(entry.getKey() + ": " + entry.getValue() + "\n");
             }
             textArea.setCaretPosition(0);
-        }
-        else {
-            System.out.println("Please select both files.");
+        } else {
+            warningWindow("Please select both files");
         }
     }
 
     private void resetButtonClicked() {
-        unsortedFrequencies.clear();
+        if (unsortedFrequencies != null) {
+            unsortedFrequencies.clear();
+        }
+        if (sortedFrequencies != null) {
+            sortedFrequencies.clear();
+        }
         textArea.setText("");
         scanFilePicker.reset();
         stopWordsFilePicker.reset();
+    }
+
+    private void warningWindow(String message) {
+        JOptionPane.showMessageDialog(null, message, "", JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void saveButtonClicked() {
+
+        saveFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        saveFileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+        int result = saveFileChooser.showSaveDialog(null);
+        if (result == saveFileChooser.APPROVE_OPTION) {
+            Path savePath = saveFileChooser.getSelectedFile().toPath();
+
+            if (sortedFrequencies != null) {
+                WordFrequency.saveWordFrequencies(savePath, sortedFrequencies);
+            }
+            else{
+                System.out.println("File destination not selected");
+            }
+        }
     }
 }

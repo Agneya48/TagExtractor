@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class WordFrequencyTest {
 
     Path stopWordsPath, christmasCarolPath, draculaPath, mobyDickPath;
-    WordFrequency test1, test2, test3;
     Map<String, Integer> map1, map2, map3;
     Map<String, Integer> sort1, sort2, sort3;
 
@@ -24,17 +23,13 @@ class WordFrequencyTest {
         christmasCarolPath = Paths.get("test", "testResources", "ChristmasCarol.txt");
         draculaPath = Paths.get("test", "testResources", "Dracula.txt");
         mobyDickPath = Paths.get("test", "testResources", "MobyDick.txt");
-
-        test1 = new WordFrequency();
-        test2 = new WordFrequency();
-        test3 = new WordFrequency();
     }
 
     @Test
     void getWordFrequencies() {
-        map1 = test1.getWordFrequencies(christmasCarolPath, stopWordsPath);
-        map2 = test2.getWordFrequencies(draculaPath, stopWordsPath);
-        map3 = test3.getWordFrequencies(mobyDickPath, stopWordsPath);
+        map1 = WordFrequency.getWordFrequencies(christmasCarolPath, stopWordsPath);
+        map2 = WordFrequency.getWordFrequencies(draculaPath, stopWordsPath);
+        map3 = WordFrequency.getWordFrequencies(mobyDickPath, stopWordsPath);
 
         //for easier testing, just test the length and the existence of some keys
         assertFalse(map1.isEmpty());
@@ -53,13 +48,13 @@ class WordFrequencyTest {
 
     @Test
     void sortByValueDesc() {
-        map1 = test1.getWordFrequencies(christmasCarolPath, stopWordsPath);
-        map2 = test2.getWordFrequencies(draculaPath, stopWordsPath);
-        map3 = test3.getWordFrequencies(mobyDickPath, stopWordsPath);
+        map1 = WordFrequency.getWordFrequencies(christmasCarolPath, stopWordsPath);
+        map2 = WordFrequency.getWordFrequencies(draculaPath, stopWordsPath);
+        map3 = WordFrequency.getWordFrequencies(mobyDickPath, stopWordsPath);
 
-        sort1 = test1.sortByValueDesc(map1);
-        sort2 = test2.sortByValueDesc(map2);
-        sort3 = test3.sortByValueDesc(map3);
+        sort1 = WordFrequency.sortByValueDesc(map1);
+        sort2 = WordFrequency.sortByValueDesc(map2);
+        sort3 = WordFrequency.sortByValueDesc(map3);
 
         assertFalse(sort1.isEmpty());
         assertFalse(sort2.isEmpty());
@@ -106,13 +101,13 @@ class WordFrequencyTest {
         //test is virtually identical to DESC, with a minor adjustment
         //so the last 10 values are being tested instead
 
-        map1 = test1.getWordFrequencies(christmasCarolPath, stopWordsPath);
-        map2 = test2.getWordFrequencies(draculaPath, stopWordsPath);
-        map3 = test3.getWordFrequencies(mobyDickPath, stopWordsPath);
+        map1 = WordFrequency.getWordFrequencies(christmasCarolPath, stopWordsPath);
+        map2 = WordFrequency.getWordFrequencies(draculaPath, stopWordsPath);
+        map3 = WordFrequency.getWordFrequencies(mobyDickPath, stopWordsPath);
 
-        sort1 = test1.sortByValueAsc(map1);
-        sort2 = test2.sortByValueAsc(map2);
-        sort3 = test3.sortByValueAsc(map3);
+        sort1 = WordFrequency.sortByValueAsc(map1);
+        sort2 = WordFrequency.sortByValueAsc(map2);
+        sort3 = WordFrequency.sortByValueAsc(map3);
 
         assertFalse(sort1.isEmpty());
         assertFalse(sort2.isEmpty());
